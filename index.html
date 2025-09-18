@@ -1,63 +1,56 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ProjectTest — mini‑application</title>
-  <!-- Telegram WebApp SDK will be ignored in a normal browser, but works in Telegram -->
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ProjectTest — mini-application</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root{
-      --bg:#0b1a3a; /* deep blue */
-      --card:#102753;
-      --muted:#6e7ea8;
-      --text:#e9ecf6;
-      --accent:#b66dff; /* purple CTA */
-      --ok:#2ecc71;
-      --warn:#ff5a5a;
-      --outline:#3b5fb7;
-      --chip:#0f1f44;
-      --radius:16px;
+      --bg:#0b1a3a; --card:#102753; --muted:#9fb0db; --text:#e9ecf6;
+      --accent:#b66dff; --ok:#2ecc71; --warn:#ff6b6b; --outline:#4f76ff;
+      --chip:#0f1f44; --radius:16px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--text); background:radial-gradient(1200px 600px at 50% -20%, #173572 0%, #0b1a3a 55%, #07112a 100%);
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background:radial-gradient(1200px 600px at 50% -20%, #173572 0%, #0b1a3a 55%, #07112a 100%);
     }
     .app{max-width:980px;margin:0 auto;padding:12px 12px 120px}
-    header{display:flex; align-items:center; gap:8px; position:sticky; top:0; z-index:5; backdrop-filter: blur(8px); background:rgba(7,17,42,.6); padding:8px 4px}
-    header h1{font-size:16px; font-weight:700; margin:0; opacity:.9}
+    header{display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:5; backdrop-filter: blur(8px); background:rgba(7,17,42,.55); padding:10px 6px; border-bottom:1px solid #1b2d5d}
+    header h1{font-size:16px; font-weight:800; margin:0; letter-spacing:.2px}
     header .spacer{flex:1}
-    .icon-btn{width:36px;height:36px;display:grid;place-items:center;border-radius:12px;background:var(--chip);border:1px solid #203463;cursor:pointer}
+    .icon-btn{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:var(--chip);border:1px solid #203463;cursor:pointer}
     .badge{position:absolute; top:-4px; right:-4px; background:#fff; color:#000; font-size:11px; padding:0 6px; border-radius:999px;}
-
     .search-row{display:flex; gap:8px; margin:12px 0}
-    .search{flex:1; background:var(--card); border:1px solid #1c356c; border-radius:12px; padding:10px 12px; color:var(--text)}
-    .pill-row{display:flex; gap:8px; overflow:auto; padding-bottom:6px;}
-    .pill{padding:8px 12px; border-radius:999px; background:var(--chip); border:1px solid #203463; white-space:nowrap; cursor:pointer; font-weight:600; font-size:13px}
-    .pill.active{outline:2px solid var(--outline);}
-
-    .filters{display:flex; align-items:center; gap:10px; margin:10px 0}
+    .search{flex:1; background:var(--card); border:1px solid #1c356c; border-radius:12px; padding:12px; color:var(--text)}
+    .pill-row{display:flex; gap:8px; overflow:auto; padding:6px 2px 10px}
+    .pill{padding:10px 14px; border-radius:999px; background:var(--chip); border:1px solid #203463; white-space:nowrap; cursor:pointer; font-weight:700; font-size:13px; display:flex; align-items:center; gap:6px}
+    .pill.active{outline:2px solid var(--outline)}
+    .pill.locked{opacity:.6; position:relative}
+    .pill.locked::after{content:"🔒"; margin-left:4px; opacity:.9}
+    .filters{display:flex; align-items:center; gap:10px; margin:8px 0}
     .filter-card{background:var(--card); border:1px solid #1c356c; border-radius:var(--radius); padding:12px; display:none;}
     .filter-card.open{display:block}
     .filter-row{display:flex; gap:8px; flex-wrap:wrap}
     select, .tag{background:#0c1d44; border:1px solid #21407d; color:var(--text); border-radius:10px; padding:8px 10px}
     .tag{cursor:pointer}
     .tag.active{outline:2px solid var(--outline)}
-    .apply{margin-top:10px; width:100%; padding:10px; background:var(--accent); border:none; color:#fff; border-radius:12px; font-weight:700; cursor:pointer}
-
+    .apply{margin-top:10px; width:100%; padding:10px; background:var(--accent); border:none; color:#fff; border-radius:12px; font-weight:800; cursor:pointer}
     .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
     @media (min-width:740px){ .grid{grid-template-columns:repeat(3,1fr);} }
-    .card{background:var(--card); border:1px solid #1c356c; border-radius:var(--radius); overflow:hidden; cursor:pointer}
+    .card{background:linear-gradient(180deg,#102753,#0e2147); border:1px solid #1c356c; border-radius:var(--radius); overflow:hidden; cursor:pointer; transition:transform .12s ease}
+    .card:hover{transform:translateY(-1px)}
     .img{aspect-ratio: 4/3; background:#0d1d3f; display:grid; place-items:center}
     .img img{max-width:100%; max-height:100%}
     .card .body{padding:10px}
-    .name{font-weight:800; font-size:15px; margin:0 0 4px 0}
+    .name{font-weight:900; font-size:15px; margin:0 0 4px 0}
     .desc{color:var(--muted); font-size:12px; margin:0 0 6px}
-    .meta{display:flex; gap:6px; font-size:12px; color:#a9b7da}
-
-    /* Modal */
+    .meta{display:flex; gap:6px; font-size:12px; color:#a9b7da; flex-wrap:wrap}
+    .price{margin-left:auto; font-weight:900}
+    .quick{margin-top:8px; width:100%; padding:10px; border-radius:12px; border:1px solid #2a4b9a; background:#0f2250; color:#fff; font-weight:800}
     dialog{border:none; padding:0; width:min(560px, 96%); background:#0b1a3aAA}
     dialog::backdrop{background:rgba(0,0,0,.6)}
     .sheet{background:#0e2a63; border:1px solid #234592; border-radius:18px; overflow:hidden}
@@ -65,39 +58,43 @@
     .sheet .hero img{max-width:100%; max-height:260px}
     .sheet .content{padding:14px}
     .title-row{display:flex; align-items:center; justify-content:space-between; gap:8px}
-    .title{font-size:18px; font-weight:800; margin:0}
+    .title{font-size:18px; font-weight:900; margin:0}
     .x{background:transparent;color:#fff; border:none; font-size:22px; cursor:pointer}
-
     .options{display:grid; grid-template-columns: repeat(2, 1fr); gap:8px; margin:10px 0}
-    .opt{border:1.5px solid #294ea5; background:#0f2250; padding:10px; border-radius:14px;}
-    .opt.disabled{opacity:.6}
+    .opt{border:1.5px solid #294ea5; background:#0f2250; padding:10px; border-radius:14px; cursor:pointer}
+    .opt.disabled{opacity:.5; cursor:not-allowed}
     .opt.active{outline:2px solid var(--outline)}
     .opt .w{font-weight:800}
     .opt .p{font-size:13px; opacity:.85}
     .opt .s{font-size:11px; margin-top:4px; color:var(--ok)}
     .opt .oos{color:var(--warn)}
-
-    .qty-row{display:flex; align-items:center; gap:10px; margin:12px 0}
+    .qty-row{display:flex; align-items:center; gap:12px; margin:12px 0; justify-content:space-between}
     .stepper{display:flex; align-items:center; gap:6px}
     .stepper button{width:34px; height:34px; border-radius:10px; border:1px solid #294ea5; background:#0f2250; color:#fff; font-size:18px}
-    .stepper .v{min-width:40px; text-align:center; font-weight:700}
-
-    .total{display:flex; align-items:center; justify-content:space-between; margin:8px 0; font-weight:800}
-    .cta{width:100%; padding:12px 14px; background:var(--accent); border:none; color:#fff; border-radius:14px; font-weight:800; font-size:15px; cursor:pointer}
-
-    /* MainButton space */
-    .footer-spacer{height:70px}
+    .stepper .v{min-width:40px; text-align:center; font-weight:800}
+    .total{display:flex; align-items:center; justify-content:space-between; margin:8px 0; font-weight:900}
+    .cta{width:100%; padding:12px 14px; background:var(--accent); border:none; color:#fff; border-radius:14px; font-weight:900; font-size:15px; cursor:pointer}
+    .footer-spacer{height:80px}
+    /* small helper chips */
+    .chip{display:inline-flex; align-items:center; gap:6px; padding:6px 8px; border-radius:999px; background:#0f2250; border:1px solid #294ea5; font-size:12px}
+    .hint{font-size:12px; color:#b6c5ea; margin-top:6px}
+    /* bottom sheet for checkout */
+    .drawer{position:fixed; left:0; right:0; bottom:0; background:#0e2a63; border-top:1px solid #234592; padding:12px; display:none}
+    .drawer.open{display:block}
+    .row{display:flex; align-items:center; justify-content:space-between; gap:8px}
+    .payopt{display:flex; gap:8px; margin:8px 0}
+    .payopt label{display:flex; gap:6px; align-items:center; padding:8px 10px; border-radius:10px; border:1px solid #2a4b9a; background:#0f2250; cursor:pointer}
+    .small{font-size:12px; opacity:.9}
+    .link{color:#fff; text-decoration:underline; cursor:pointer}
   </style>
 </head>
 <body>
   <div class="app" id="app">
     <header>
       <button id="menuBtn" class="icon-btn" title="Menu">☰</button>
-      <h1>ProjectTest <small style="opacity:.6;font-weight:600">mini‑application</small></h1>
+      <h1>ProjectTest <small style="opacity:.6;font-weight:600">mini-application</small></h1>
       <div class="spacer"></div>
-      <div style="position:relative">
-        <button id="giftBtn" class="icon-btn" title="Rewards">🎁</button>
-      </div>
+      <button id="refBtn" class="icon-btn" title="Parrainage">🤝</button>
       <div style="position:relative">
         <button id="cartBtn" class="icon-btn" title="Panier">🛒</button>
         <span id="cartBadge" class="badge" style="display:none">0</span>
@@ -105,12 +102,14 @@
     </header>
 
     <div class="search-row">
-      <input id="search" class="search" placeholder="Rechercher des produits…" />
+      <input id="search" class="search" placeholder="Rechercher…" />
       <button id="filterToggle" class="icon-btn" title="Filtres">🔎</button>
     </div>
 
+    <!-- Categories w/ flags + loyalty lock -->
     <div class="pill-row" id="categories"></div>
 
+    <!-- Quick filters -->
     <div class="filters">
       <div class="filter-card" id="filterCard">
         <div class="filter-row">
@@ -128,23 +127,27 @@
     </div>
 
     <div id="grid" class="grid"></div>
-
     <div class="footer-spacer"></div>
   </div>
 
+  <!-- Product dialog -->
   <dialog id="productDialog">
     <div class="sheet">
-      <div class="hero"><img id="dImg" alt="" /></div>
+      <div class="hero"><img id="dImg" alt=""/></div>
       <div class="content">
         <div class="title-row">
           <h3 class="title" id="dTitle"></h3>
           <button class="x" id="dClose">×</button>
         </div>
         <p id="dDesc" class="desc"></p>
-        <div style="font-weight:700; margin-top:10px">Sélectionner le poids</div>
+        <div class="chip" id="dCategoryChip"></div>
+        <div class="hint" id="dTags"></div>
+
+        <div style="font-weight:700; margin-top:10px">Sélection</div>
         <div class="options" id="optGrid"></div>
+
         <div class="qty-row">
-          <div style="font-weight:700">Quantité</div>
+          <div style="font-weight:800">Quantité</div>
           <div class="stepper">
             <button id="minus">−</button>
             <div class="v" id="qty">1</div>
@@ -157,84 +160,166 @@
     </div>
   </dialog>
 
+  <!-- Referral / Parrainage -->
+  <dialog id="refDialog">
+    <div class="sheet">
+      <div class="content">
+        <div class="title-row">
+          <h3 class="title">Programme de parrainage</h3>
+          <button class="x" id="refClose">×</button>
+        </div>
+        <p class="desc">Partagez votre code. <b>Vous</b> gagnez 5% en avoir quand votre filleul passe sa 1ère commande. <b>Lui/Elle</b> obtient <b>5% de remise</b> immédiate.</p>
+        <div class="chip">Votre code : <span id="myCode" style="font-weight:900"></span> <button id="copyCode" class="icon-btn" title="Copier">📋</button></div>
+        <div class="hint">Collez un code reçu :</div>
+        <div class="search-row">
+          <input id="applyCodeInput" class="search" placeholder="Code parrain"/>
+          <button id="applyCodeBtn" class="icon-btn" title="Appliquer">✅</button>
+        </div>
+        <p class="small">Les remises parrainage se déduisent automatiquement au paiement.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Checkout Drawer -->
+  <div id="checkout" class="drawer">
+    <div class="row"><b>Panier</b> <button id="closeCheckout" class="icon-btn">×</button></div>
+    <div id="cartLines" class="hint" style="margin:8px 0"></div>
+    <div class="row"><span>Sous-total</span><b id="subTotal">0€</b></div>
+    <div class="row"><span>Remise fidélité</span><b id="loyDisc">−0€</b></div>
+    <div class="row"><span>Remise parrainage</span><b id="refDisc">−0€</b></div>
+    <div class="row" style="margin-top:6px"><span>Total</span><b id="grandTotal">0€</b></div>
+    <div class="payopt">
+      <label><input type="radio" name="pay" value="cash" checked> Cash</label>
+      <label><input type="radio" name="pay" value="crypto"> Crypto</label>
+    </div>
+    <button id="confirmPay" class="cta">Confirmer et payer</button>
+    <div class="small">Démo : connectez votre passerelle de paiement crypto/cash ici.</div>
+  </div>
+
   <script>
-  // --- Minimal data store ----------------------------------------------------
+  // ========== Data (replace with your real legal products) ===================
   const PRODUCTS = [
-    {
-      id: 'amnesia',
-      name: "Amnesia d'Hollande 🇳🇱",
-      desc: "Nouvelle arrivée de la frappe d'Hollande",
-      category: 'CBD',
-      tags:['Indica'],
-      image: 'https://picsum.photos/seed/amnesia/600/400',
-      variants: [
-        {label:'5g', price:30, inStock:false},
-        {label:'10g', price:90, inStock:true}
-      ]
-    },
-    {
-      id: 'purple', name:'Purple Haze 🇳🇱', desc:'Purple haze tout droit venu d\'Hollande. Sativa', category:'CBD', tags:['Sativa'], image:'https://picsum.photos/seed/purple/600/400',
-      variants:[{label:'5g', price:28, inStock:true},{label:'10g', price:85, inStock:true}]
-    },
-    { id:'frozen', name:'Frozen Gummies', desc:'Bonbons CBD glacés', category:'FROZEN', tags:['Gourmand'], image:'https://picsum.photos/seed/frozen/600/400', variants:[{label:'Boîte', price:25, inStock:true}]}
+    { id:'promo1', name:"Pack Découverte", desc:"Sélection spéciale en promotion", category:'Promotion', tags:['Pack','Best-seller'], image:'https://picsum.photos/seed/promo/640/480',
+      variants:[{label:'Small', price:19, inStock:true},{label:'Large', price:35, inStock:true}] },
+    { id:'us1', name:"Flower — US 🇺🇸", desc:"Qualité premium", category:'US', tags:['Weed US'], image:'https://picsum.photos/seed/us/640/480',
+      variants:[{label:'5g', price:45, inStock:true},{label:'10g', price:85, inStock:true}] },
+    { id:'ma1', name:"Marocain 🇲🇦", desc:"Tradition et savoir-faire", category:'Marocain', tags:['Résine'], image:'https://picsum.photos/seed/ma/640/480',
+      variants:[{label:'Plaquette', price:60, inStock:true}] },
+    { id:'ex1', name:"Produit d’exception 🇲🇦🇺🇸", desc:"Édition limitée", category:'Exception', tags:['Limited'], image:'https://picsum.photos/seed/ex/640/480',
+      variants:[{label:'10g', price:120, inStock:true}] },
+    { id:'weedus1', name:"Weed US 🇺🇸", desc:"Série US", category:'WeedUS', tags:['Sativa'], image:'https://picsum.photos/seed/weedus/640/480',
+      variants:[{label:'5g', price:49, inStock:true}] },
+    { id:'es1', name:"Espagne 🇪🇸", desc:"Sélection Espagne", category:'Espagne', tags:['Indoor'], image:'https://picsum.photos/seed/es/640/480',
+      variants:[{label:'5g', price:39, inStock:true}] },
+    { id:'mousseux1', name:"Mousseux 🇲🇦", desc:"Texture onctueuse", category:'Mousseux', tags:['Spécial'], image:'https://picsum.photos/seed/mousseux/640/480',
+      variants:[{label:'Pot', price:70, inStock:true}] },
+    { id:'acc1', name:"Grinder", desc:"Accessoire classique", category:'Accessoires', tags:['Outil'], image:'https://picsum.photos/seed/grinder/640/480',
+      variants:[{label:'Standard', price:15, inStock:true}] },
+    { id:'fid1', name:"Fidélité — Offre privée", desc:"Réservé aux habitués (10 commandes min.)", category:'Fidelite', tags:['Privé'], image:'https://picsum.photos/seed/fidelite/640/480',
+      variants:[{label:'Pack VIP', price:1, inStock:true}] }, // price placeholder
   ];
 
-  const CATEGORIES = ['Tout','CBD','FROZEN'];
-  const TAGS = ['Indica','Sativa','Gourmand'];
+  // Category order & labels
+  const CATEGORY_DEFS = [
+    {key:'Promotion', label:'Promotion'},
+    {key:'US', label:'US 🇺🇸'},
+    {key:'Marocain', label:'Marocain 🇲🇦'},
+    {key:'Exception', label:'Produit d’exception 🇲🇦 🇺🇸'},
+    {key:'WeedUS', label:'Weed US 🇺🇸'},
+    {key:'Espagne', label:'Espagne 🇪🇸'},
+    {key:'Mousseux', label:'Mousseux 🇲🇦'},
+    {key:'Accessoires', label:'Accessoires'},
+    {key:'Fidelite', label:'Code fidélité (10+)', locked:true},
+  ];
 
-  // --- Telegram integration (safe in browser) -------------------------------
-  const tg = window.Telegram?.WebApp ?? { initDataUnsafe:{}, MainButton:{show(){}, hide(){}, setText(){}} };
-  tg.ready?.();
-  tg.expand?.();
+  // Tags to show in filters (optional)
+  const TAGS = ['Pack','Best-seller','Sativa','Indoor','Résine','Limited','Spécial','Outil','Privé'];
 
-  // --- State ----------------------------------------------------------------
+  // ========== Telegram integration (safe in browser) ========================
+  const tg = window.Telegram?.WebApp ?? { initDataUnsafe:{}, MainButton:{show(){}, hide(){}, setText(){}, onClick(){}}, HapticFeedback:{impactOccurred(){}}, showAlert:alert, ready(){}, expand(){} };
+  tg.ready?.(); tg.expand?.();
+
+  // ========== State & persistence ===========================================
+  const LS = {
+    save(){ localStorage.setItem('miniapp-state', JSON.stringify(state)); },
+    load(){ try{ return JSON.parse(localStorage.getItem('miniapp-state')||'{}'); }catch{return{}} }
+  };
+  const initial = LS.load();
+
   const state = {
-    category:'Tout',
-    search:'',
-    tags:new Set(),
-    cart:[] // {id, name, variant, price, qty}
+    category: initial.category ?? 'Promotion',
+    search: initial.search ?? '',
+    tags: new Set(initial.tags ?? []),
+    cart: initial.cart ?? [],             // {key,id,name,variant,price,qty}
+    orderCount: initial.orderCount ?? 0,  // completed orders
+    referral:{ myCode: initial?.referral?.myCode ?? genCode(), appliedCode: initial?.referral?.appliedCode ?? null }
   };
 
-  // --- UI helpers ------------------------------------------------------------
+  function persist(){
+    LS.save({ ...state, tags:[...state.tags] });
+  }
+
+  function genCode(){
+    const user = (tg.initDataUnsafe?.user?.id??Math.floor(Math.random()*1e6)).toString().slice(-4);
+    return 'PT'+user+Math.random().toString(36).slice(2,5).toUpperCase();
+  }
+
+  // ========== DOM helpers ====================================================
   const $ = s=>document.querySelector(s);
   const grid = $('#grid');
   const badge = $('#cartBadge');
 
+  // ========== Categories =====================================================
   function renderCategories(){
-    const row = $('#categories');
-    row.innerHTML = '';
-    CATEGORIES.forEach(cat=>{
+    const row = $('#categories'); row.innerHTML='';
+    CATEGORY_DEFS.forEach(cat=>{
+      const locked = cat.locked && state.orderCount < 10;
       const b = document.createElement('button');
-      b.className = 'pill'+(state.category===cat?' active':'');
-      b.textContent = cat;
-      b.onclick = ()=>{ state.category=cat; renderProducts(); updateCategorySelect(); };
+      b.className = 'pill'+(state.category===cat.key?' active':'')+(locked?' locked':'');
+      b.textContent = cat.label;
+      b.onclick = ()=>{
+        if(locked){
+          toast("Catégorie fidélité réservée après 10 commandes.");
+          return;
+        }
+        state.category = cat.key;
+        renderProducts(); updateCategorySelect(); persist();
+      };
       row.appendChild(b);
     });
   }
 
   function updateCategorySelect(){
     const sel = $('#categorySelect');
-    sel.innerHTML = CATEGORIES.map(c=>`<option ${c===state.category?'selected':''}>${c}</option>`).join('');
+    sel.innerHTML = CATEGORY_DEFS.map(c=>{
+      const locked = c.locked && state.orderCount<10;
+      return `<option value="${c.key}" ${c.key===state.category?'selected':''} ${locked?'disabled':''}>${c.label}</option>`;
+    }).join('');
   }
 
+  // ========== Tags row =======================================================
   function renderTagRow(){
-    const row = $('#tagRow');
-    row.innerHTML = '';
+    const row = $('#tagRow'); row.innerHTML='';
     TAGS.forEach(t=>{
       const el = document.createElement('div');
       el.className = 'tag'+(state.tags.has(t)?' active':'');
       el.textContent = t;
-      el.onclick = ()=>{ state.tags.has(t)? state.tags.delete(t): state.tags.add(t); renderTagRow(); };
+      el.onclick = ()=>{ state.tags.has(t)? state.tags.delete(t): state.tags.add(t); renderTagRow(); renderProducts(); persist(); };
       row.appendChild(el);
-    })
+    });
   }
 
+  // ========== Product list ===================================================
   function productMatches(p){
-    const byCat = state.category==='Tout' || p.category===state.category;
+    const inCat = state.category ? p.category===state.category : true;
     const bySearch = !state.search || (p.name+" "+p.desc).toLowerCase().includes(state.search.toLowerCase());
     const byTags = state.tags.size===0 || [...state.tags].every(t=>p.tags.includes(t));
-    return byCat && bySearch && byTags;
+    // hide loyalty products if not eligible
+    const loyaltyOK = p.category!=='Fidelite' || state.orderCount>=10;
+    return inCat && bySearch && byTags && loyaltyOK;
   }
+
+  function minPrice(p){ return Math.min(...p.variants.filter(v=>v.inStock).map(v=>v.price)); }
 
   function renderProducts(){
     const items = PRODUCTS.filter(productMatches);
@@ -243,41 +328,68 @@
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
-        <div class="img"><img src="${p.image}" alt="${p.name}" /></div>
+        <div class="img"><img src="${p.image}" loading="lazy" alt="${p.name}"/></div>
         <div class="body">
-          <div class="name">${p.name}</div>
+          <div style="display:flex; align-items:center; gap:6px">
+            <div class="name">${p.name}</div>
+            <div class="price">${Number.isFinite(minPrice(p)) ? (minPrice(p).toFixed(0)+'€') : ''}</div>
+          </div>
           <p class="desc">${p.desc}</p>
-          <div class="meta"><span>${p.category}</span>${p.tags.map(t=>`<span>· ${t}</span>`).join('')}</div>
+          <div class="meta"><span>${labelOf(p.category)}</span>${p.tags.map(t=>`<span>· ${t}</span>`).join('')}</div>
+          <button class="quick">Ajouter</button>
         </div>`;
+      card.querySelector('.quick').onclick = (e)=>{ e.stopPropagation(); quickAdd(p); };
       card.onclick = ()=> openProduct(p);
       grid.appendChild(card);
-    })
+    });
   }
 
+  function labelOf(key){ return (CATEGORY_DEFS.find(c=>c.key===key)||{}).label || key; }
+
+  // ========== Cart & badge ===================================================
   function updateBadge(){
     const count = state.cart.reduce((n,i)=>n+i.qty,0);
-    if(count>0){ badge.style.display='inline-block'; badge.textContent = count; }
-    else{ badge.style.display='none'; }
-
+    badge.style.display = count>0 ? 'inline-block' : 'none';
+    if(count>0) badge.textContent = count;
     // Telegram MainButton shows subtotal
-    const total = state.cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const total = cartSubtotal();
     if(total>0){
       tg?.MainButton?.setText?.(`Payer · ${total.toFixed(2)}€`);
       tg?.MainButton?.show?.();
     }else{
       tg?.MainButton?.hide?.();
     }
+    persist();
   }
 
-  // --- Product dialog --------------------------------------------------------
-  const dialog = $('#productDialog');
-  let current = null; // {p, variantIndex, qty}
+  function cartSubtotal(){ return state.cart.reduce((s,i)=>s+i.price*i.qty,0); }
+
+  function quickAdd(p){
+    const idx = p.variants.findIndex(v=>v.inStock);
+    if(idx<0) return toast('Rupture de stock.');
+    addToCart(p, idx, 1);
+    tg?.HapticFeedback?.impactOccurred?.('soft');
+  }
+
+  function addToCart(p, variantIndex, qty){
+    const v = p.variants[variantIndex];
+    const key = `${p.id}-${v.label}`;
+    const existing = state.cart.find(i=>i.key===key);
+    if(existing) existing.qty += qty;
+    else state.cart.push({key, id:p.id, name:p.name, variant:v.label, price:v.price, qty});
+    updateBadge();
+  }
+
+  // ========== Product dialog =================================================
+  const dialog = $('#productDialog'); let current = null;
 
   function openProduct(p){
-    current = {p, variantIndex: p.variants.findIndex(v=>v.inStock) ?? 0, qty:1};
+    current = {p, variantIndex: Math.max(0, p.variants.findIndex(v=>v.inStock)), qty:1};
     $('#dImg').src = p.image;
     $('#dTitle').textContent = p.name;
     $('#dDesc').textContent = p.desc;
+    $('#dCategoryChip').textContent = labelOf(p.category);
+    $('#dTags').textContent = p.tags.join(' · ');
     renderOptions();
     updateDialogTotals();
     dialog.showModal();
@@ -288,10 +400,7 @@
     current.p.variants.forEach((v,idx)=>{
       const el = document.createElement('div');
       el.className = 'opt'+(idx===current.variantIndex?' active':'')+(v.inStock?'':' disabled');
-      el.innerHTML = `
-        <div class="w">${v.label}</div>
-        <div class="p">${v.price.toFixed(0)}€</div>
-        <div class="s ${v.inStock? '': 'oos'}">${v.inStock? 'En stock' : 'Rupture de stock'}</div>`;
+      el.innerHTML = `<div class="w">${v.label}</div><div class="p">${v.price.toFixed(0)}€</div><div class="s ${v.inStock? '': 'oos'}">${v.inStock? 'En stock' : 'Rupture de stock'}</div>`;
       el.onclick = ()=>{ if(!v.inStock) return; current.variantIndex = idx; renderOptions(); updateDialogTotals(); };
       box.appendChild(el);
     })
@@ -307,49 +416,103 @@
   $('#plus').onclick = ()=>{ current.qty++; updateDialogTotals(); }
   $('#minus').onclick = ()=>{ current.qty = Math.max(1, current.qty-1); updateDialogTotals(); }
   $('#dClose').onclick = ()=> dialog.close();
-
   $('#addToCart').onclick = ()=>{
     const v = current.p.variants[current.variantIndex];
     if(!v.inStock) return;
-    const key = `${current.p.id}-${v.label}`;
-    const existing = state.cart.find(i=>i.key===key);
-    if(existing) existing.qty += current.qty;
-    else state.cart.push({key, id:current.p.id, name:current.p.name, variant:v.label, price:v.price, qty:current.qty});
-    updateBadge();
+    addToCart(current.p, current.variantIndex, current.qty);
     dialog.close();
-    try{ tg.HapticFeedback?.impactOccurred?.('soft'); }catch{}
-  }
+  };
 
-  // --- Filters & search ------------------------------------------------------
-  $('#search').addEventListener('input', e=>{ state.search = e.target.value; renderProducts(); });
+  // ========== Filters & search ==============================================
+  $('#search').value = state.search;
+  $('#search').addEventListener('input', e=>{ state.search = e.target.value; renderProducts(); persist(); });
   $('#filterToggle').onclick = ()=> $('#filterCard').classList.toggle('open');
   $('#applyFilters').onclick = ()=>{
     state.category = $('#categorySelect').value;
     renderCategories();
     $('#filterCard').classList.remove('open');
     renderProducts();
+    persist();
+  };
+
+  // ========== Referral program ==============================================
+  const refDialog = $('#refDialog');
+  $('#refBtn').onclick = ()=>{ $('#myCode').textContent = state.referral.myCode; refDialog.showModal(); };
+  $('#refClose').onclick = ()=> refDialog.close();
+  $('#copyCode').onclick = async ()=>{
+    try{ await navigator.clipboard.writeText(state.referral.myCode); toast('Code copié.'); }
+    catch{ toast('Impossible de copier.'); }
+  };
+  $('#applyCodeBtn').onclick = ()=>{
+    const val = $('#applyCodeInput').value.trim().toUpperCase();
+    if(!val || val===state.referral.myCode){ toast('Code invalide.'); return; }
+    state.referral.appliedCode = val;
+    toast('Code parrain appliqué. Remise au paiement.');
+    refDialog.close(); persist();
+  };
+
+  // ========== Checkout flow (fast taps) =====================================
+  const drawer = $('#checkout');
+  function openCheckout(){
+    renderCheckout();
+    drawer.classList.add('open');
+  }
+  function closeCheckout(){ drawer.classList.remove('open'); }
+
+  function renderCheckout(){
+    const lines = state.cart.map(i=>`${i.name} ${i.variant} ×${i.qty} — ${(i.price*i.qty).toFixed(2)}€`).join('<br/>');
+    $('#cartLines').innerHTML = lines || 'Votre panier est vide.';
+    const sub = cartSubtotal();
+
+    // Discounts: 5% referral for filleul if a code is applied; 3% loyalty if orderCount>=10
+    const refDisc = state.referral.appliedCode ? sub * 0.05 : 0;
+    const loyDisc = state.orderCount >= 10 ? sub * 0.03 : 0;
+
+    $('#subTotal').textContent = sub.toFixed(2)+'€';
+    $('#refDisc').textContent = '−'+refDisc.toFixed(2)+'€';
+    $('#loyDisc').textContent = '−'+loyDisc.toFixed(2)+'€';
+    $('#grandTotal').textContent = (sub - refDisc - loyDisc).toFixed(2)+'€';
   }
 
-  // --- Cart and checkout (demo only) ----------------------------------------
   $('#cartBtn').onclick = ()=>{
-    if(state.cart.length===0){ alert('Votre panier est vide.'); return; }
-    const lines = state.cart.map(i=>`${i.name} ${i.variant} ×${i.qty} — ${(i.price*i.qty).toFixed(2)}€`).join('\n');
-    const total = state.cart.reduce((s,i)=>s+i.price*i.qty,0).toFixed(2);
-    if(window.Telegram?.WebApp){
-      Telegram.WebApp.showAlert(`Panier:\n\n${lines}\n\nTotal: ${total}€\n\n( démo — implémentez votre paiement )`);
+    if(state.cart.length===0){ toast('Votre panier est vide.'); return; }
+    openCheckout();
+  };
+  $('#closeCheckout').onclick = closeCheckout;
+
+  // Confirm pay
+  $('#confirmPay').onclick = ()=>{
+    if(state.cart.length===0) return;
+    const method = document.querySelector('input[name="pay"]:checked').value;
+    const total = $('#grandTotal').textContent;
+    if(method==='crypto'){
+      // Hook your crypto flow here
+      alert(`Démo crypto — à brancher.\nMontant: ${total}`);
     }else{
-      alert(`Panier:\n\n${lines}\n\nTotal: ${total}€\n\n( démo — implémentez votre paiement )`);
+      // Cash on delivery or in-person
+      alert(`Commande confirmée (Cash).\nMontant: ${total}`);
     }
-  }
+    // Mark order complete (demo), increment order count, clear cart
+    state.orderCount += 1;
+    state.cart = [];
+    updateBadge();
+    renderProducts();
+    closeCheckout();
+    toast('Merci pour votre commande !');
+  };
 
-  // MainButton tap (Telegram)
+  // Telegram MainButton tap mirrors cart action
   if(tg?.MainButton){
-    tg.onEvent?.('mainButtonClicked', ()=>{
-      $('#cartBtn').click();
-    });
+    tg.onEvent?.('mainButtonClicked', ()=>{ $('#cartBtn').click(); });
   }
 
-  // --- Init -----------------------------------------------------------------
+  // ========== Small utilities ===============================================
+  function toast(msg){
+    if(window.Telegram?.WebApp){ Telegram.WebApp.showAlert(msg); }
+    else alert(msg);
+  }
+
+  // ========== Init ===========================================================
   renderCategories();
   updateCategorySelect();
   renderTagRow();
